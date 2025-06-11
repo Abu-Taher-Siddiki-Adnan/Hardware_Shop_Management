@@ -1,0 +1,49 @@
+{% extends 'shop/base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h3 class="mb-4">Shopping Cart</h3>
+    
+    {% if cart_items %}
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover align-middle text-center">
+            <thead class="table-secondary">
+                <tr>
+                    <th class="text-start">Product</th>
+                    <th>Quantity</th>
+                    <th>Unit Price<br><small>(After Discount)</small></th>
+                    <th>Total Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in cart_items %}
+                <tr>
+                    <td class="text-start">{{ item.product.name }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>৳ {{ item.discounted_price|floatformat:2 }}</td>
+                    <td>৳ {{ item.total_price|floatformat:2 }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <h4 class="text-end mt-3 mb-4">Subtotal: <strong>৳ {{ subtotal|floatformat:2 }}</strong></h4>
+
+    <div class="d-flex justify-content-end gap-2">
+        <form method="post" class="no-print">
+            {% csrf_token %}
+            <input type="hidden" name="clear" value="true">
+            <button type="submit" class="btn btn-danger">Clear Cart</button>
+        </form>
+
+        <a href="{% url 'print_bill' %}" class="btn btn-primary">Print Bill</a>
+    </div>
+    
+    {% else %}
+    <div class="alert alert-info text-center" role="alert">
+        Your cart is currently empty.
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

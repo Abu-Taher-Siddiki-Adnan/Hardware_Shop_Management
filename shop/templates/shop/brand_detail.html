@@ -1,0 +1,81 @@
+{% extends 'shop/base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Brand: {{ brand.name }}</h2>
+
+    <form method="get" class="mb-4 d-flex" role="search" aria-label="Search products">
+        <input 
+            type="text" 
+            name="q" 
+            class="form-control me-2" 
+            placeholder="Search products..." 
+            value="{{ query|default:'' }}" 
+            aria-label="Search products"
+        >
+        <button type="submit" class="btn btn-outline-primary">Search</button>
+        {% if query %}
+            <a href="{% url 'brand_detail' brand.id %}" class="btn btn-outline-secondary ms-2">Clear</a>
+        {% endif %}
+    </form>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped align-middle text-center">
+            <thead class="table-dark">
+                <tr>
+                    <th>Product</th>
+                    <th>Buying Price</th>
+                    <th>Selling Price</th>
+                    <th>Quantity</th>
+                    <th>Discount</th>
+                    <th>Add to Cart</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product in products %}
+                <tr>
+                    <form method="post" action="{% url 'add_to_cart' %}" class="d-flex align-items-center justify-content-center gap-2">
+                        {% csrf_token %}
+                        <input type="hidden" name="product_id" value="{{ product.id }}">
+                        
+                        <td class="text-start">
+                            <strong>{{ product.name }}</strong><br>
+                            <a href="{% url 'edit_product' product.id %}" class="btn btn-sm btn-warning mt-2">Edit</a>
+                        </td>
+                        <td>{{ product.buying_price|floatformat:2 }}</td>
+                        <td>{{ product.selling_price|floatformat:2 }}</td>
+                        <td style="max-width: 80px;">
+                            <input 
+                                type="number" 
+                                name="quantity" 
+                                value="1" 
+                                min="1" 
+                                class="form-control form-control-sm" 
+                                aria-label="Quantity for {{ product.name }}"
+                            >
+                        </td>
+                        <td style="max-width: 100px;">
+                            <input 
+                                type="number" 
+                                step="0.01" 
+                                name="discount" 
+                                value="0.00" 
+                                class="form-control form-control-sm" 
+                                aria-label="Discount for {{ product.name }}"
+                            >
+                        </td>
+                        <td>
+                            <button type="submit" class="btn btn-sm btn-success px-3">Add</button>
+                        </td>
+                    </form>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center text-muted">No products found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

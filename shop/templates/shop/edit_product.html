@@ -1,0 +1,38 @@
+{% extends 'shop/base.html' %}
+{% block content %}
+<div class="col-md-6 offset-md-3 mt-4">
+    <h3 class="mb-4">Edit Product Price - <strong>{{ product.name }}</strong></h3>
+    <form method="post" novalidate>
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="buying_price" class="form-label">Buying Price</label>
+            <input 
+                type="number" 
+                id="buying_price" 
+                name="buying_price" 
+                value="{{ product.buying_price }}" 
+                class="form-control" 
+                step="0.01" 
+                min="0" 
+                required 
+                autofocus>
+        </div>
+        <div class="mb-3">
+            <label for="selling_price" class="form-label">Selling Price</label>
+            <input 
+                type="number" 
+                id="selling_price" 
+                name="selling_price" 
+                value="{{ product.selling_price }}" 
+                class="form-control" 
+                step="0.01" 
+                min="0" 
+                required>
+        </div>
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-primary">Update</button>
+            <a href="{% url 'brand_detail' product.brand.id %}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

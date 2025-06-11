@@ -1,0 +1,143 @@
+{% extends 'shop/base.html' %}
+{% block content %}
+
+<style>
+/* Print styles */
+@media print {
+    .no-print,
+    nav,
+    footer {
+        display: none !important;
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
+        font-size: 12px;
+        font-family: Arial, sans-serif; /* Standard font */
+        color: #000;
+        background: #fff;
+    }
+
+    .table {
+        font-size: 10px; /* Reduced font size */
+        border-collapse: collapse !important;
+    }
+
+    h2, h4, h5, h6, p {
+        margin: 0;
+        color: #000 !important;
+    }
+
+    .table-bordered th,
+    .table-bordered td {
+        border: 1px solid #000 !important;
+    }
+}
+
+/* Screen styles */
+body {
+    font-family: Arial, sans-serif; /* Standard font */
+}
+
+.text-center h2, .text-center h5, .text-center h6 {
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.text-center h2 {
+    font-size: 2rem;
+    color: #003566;
+}
+
+.text-center h5 {
+    font-size: 1.2rem;
+    color: #003566;
+    margin-bottom: 0.2rem;
+}
+
+.text-center h6, .text-center p {
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+.table thead th {
+    background-color: #003566;
+    color: #fff;
+    font-weight: 600;
+    border: 1px solid #003566;
+}
+
+.table tbody tr:hover {
+    background-color: #e9f5ff;
+}
+
+.table td, .table th {
+    vertical-align: middle;
+    padding: 0.5rem; /* Reduced padding */
+    font-size: 0.85rem; /* Reduced font size */
+    border: 1px solid #003566;
+}
+
+.table-bordered tbody td {
+    color: #212529;
+}
+
+.text-end {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #003566;
+}
+
+.no-print .btn {
+    min-width: 100px;
+}
+
+.no-print .btn + .btn {
+    margin-left: 0.5rem;
+}
+</style>
+
+<div class="text-center mb-3">
+    <h2>আল মদিনা হার্ডওয়্যার</h2>
+    <h5>প্রোঃ আবু বকর সিদ্দিক</h5>
+    <h6>মোবাইলঃ ০১৮৭১৫৭৩৯২১</h6>
+    <p>স্টোর স্টেশন, ভেওলা মানিক চর, চকরিয়া, কক্সবাজার</p>
+    <p><strong>Date:</strong> {{ now|date:"d M Y, H:i" }}</p>
+</div>
+
+<hr>
+
+<table class="table table-bordered shadow-sm">
+    <thead>
+        <tr>
+            <th scope="col">Item (পণ্য)</th>
+            <th scope="col" class="text-center">Qty (পরিমাণ)</th>
+            <th scope="col" class="text-end">Unit Price (দর)</th>
+            <th scope="col" class="text-end">Total (মোট)</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in cart_items %}
+        <tr>
+            <td>{{ item.product.name }}</td>
+            <td class="text-center">{{ item.quantity }}</td>
+            <td class="text-end">৳ {{ item.discounted_price|floatformat:2 }}</td>
+            <td class="text-end">৳ {{ item.total_price|floatformat:2 }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="4" class="text-center text-muted">No items in cart</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h4 class="text-end mt-3">Total (মোট): ৳ {{ subtotal|floatformat:2 }}</h4>
+
+<div class="no-print mt-4 d-flex justify-content-center">
+    <a href="{% url 'showcart' %}" class="btn btn-outline-secondary">Back to Cart</a>
+    <button class="btn btn-success ms-2" onclick="window.print()">Print</button>
+</div>
+
+{% endblock %}
